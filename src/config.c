@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <ncurses.h>
 #include "config.h"
 
 void read_config(config *conf, char *config_path)

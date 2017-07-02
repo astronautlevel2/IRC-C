@@ -57,3 +57,7 @@ void irc_pong(int sock_fd, char *buf)
     sprintf(pong_string, "PONG %s\n", pinged_input);
     send(sock_fd,pong_string, len, 0);
 }
+
+void irc_message(int sock_fd, char *channel, char *buf)
+{
+}

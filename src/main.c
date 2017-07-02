@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include "config.h"
 #include "IRC.h"
 #include "stringse.h"
@@ -36,6 +37,11 @@ int main(int argc, char **argv)
     FD_ZERO(&master);
     FD_ZERO(&read_fds);
 
+    initscr(); //Curses!
+    cbreak();
+    noecho();
+    scrollok(stdscr, true);
+
     int sock_fd = irc_connect(conf);
     irc_login(sock_fd, conf);
 
@@ -46,6 +52,9 @@ int main(int argc, char **argv)
     memset(&input_buffer, 0, BUF_SIZE);
     int bytes_input = 0;
 
+    char channel[30];
+    strcpy(channel, "NONE");
+
     for (;;)
     {
         read_fds = master;
@@ -53,6 +62,7 @@ int main(int argc, char **argv)
         if (status == -1) 
         {
             perror("select");
+            endwin();
             exit(1);
         } 
         else if (status == 0)
@@ -83,6 +93,7 @@ int main(int argc, char **argv)
                 }
                 if (status == 0) {
                     puts("Remote host closed connection");
+                    endwin();
                     exit(1);
                 }
             }
@@ -92,20 +103,44 @@ int main(int argc, char **argv)
             {
                 irc_pong(sock_fd, buf);
             } else {
-                printf("%s", buf);
+                // delete_line(input_buffer);
+                printw("\r%s", buf);
+                printw("%s", input_buffer);
+                refresh();
             }
         }
 
         if (FD_ISSET(STDIN_FILENO, &read_fds))
         {
-            read(STDIN_FILENO, &input_buffer[bytes_input], 1);
-            bytes_input++;
+            char c = getch();
+            if (c == 127)
+            {
+                bytes_input--;
+                int x = 0;
+                int y = 0;
+                getyx(stdscr, y, x);
+                move(y, x-1);
+                delch();
+                refresh();
+            } else {
+                input_buffer[bytes_input] = c;
+                printw("%c", input_buffer[bytes_input]);
+                refresh();
+                bytes_input++;
+            }
 
             if (input_buffer[bytes_input - 1] ==  '\n')
             {
+                refresh();
                 input_buffer[bytes_input - 1] = '\r';
                 input_buffer[bytes_input] = '\n';
-                send(sock_fd, input_buffer, bytes_input, 0);
+                if (input_buffer[0] == '/')
+                {
+                    //TODO: Implement command handling
+                } else {
+                    send(sock_fd, input_buffer, bytes_input, 0);
+                    // irc_message(sock_fd, channel, input_buffer);
+                }
                 memset(&input_buffer, 0, bytes_input);
                 bytes_input = 0;
             }

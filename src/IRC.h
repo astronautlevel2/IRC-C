@@ -13,3 +13,4 @@
 int irc_connect(config*);
 int irc_login(int, config*);
 int irc_pong(int, char*);
+void irc_message(int, char*, char*);
