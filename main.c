@@ -80,7 +80,6 @@ int main(int argc, char **argv)
 			buf[bytes_received + 1] = '\0';
 			if(strcmp(strsub(buf, 0, 4), "PING") == 0)
 			{
-				printf("%s", buf);
 				irc_pong(sock_fd, buf);
 			} else {
 				printf("%s", buf);
