@@ -1,4 +1,4 @@
-# IRC-C
+# irC
 Simple command line IRC client using sockets
 
 # Description
