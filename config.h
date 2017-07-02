@@ -11,10 +11,10 @@
 
 typedef struct 
 {
-	char		addr[20];
-	uint16_t	port;
-	char		user[20];
-	char		password[20];
+    char        addr[20];
+    uint16_t    port;
+    char        user[20];
+    char        password[20];
     char        realname[20];
 } config;
 
