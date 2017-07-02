@@ -8,10 +8,10 @@
 #include <stdint.h>
 #include "config.h"
 
-void read_config(config *conf)
+void read_config(config *conf, char *config_path)
 {
     FILE *fp;
-    if (fp = fopen("./config", "r"))
+    if (fp = fopen(config_path, "r"))
     {
         deserialize(conf, fp);
     } else {
@@ -31,13 +31,13 @@ void read_config(config *conf)
         printf("Password to use (optional): ");
         fgets(conf->password, 20, stdin);
         conf->password[strlen(conf->password)-1] = '\0';
-        serialize(conf);
+        serialize(conf, config_path);
     }
 }
 
-int serialize(config *conf)
+int serialize(config *conf, char *config_path)
 {
-    FILE *fp = fopen("./config", "w");
+    FILE *fp = fopen(config_path, "w");
     fwrite(conf, sizeof(*conf), 1, fp);
     fclose(fp);
     return 0;

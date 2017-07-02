@@ -11,13 +11,18 @@
 
 #define BUF_SIZE 512
 
-int login_sent = 0;
-
 int main(int argc, char **argv)
 {
+    char *config_path;
+    if (argc == 2)
+    {
+        config_path = argv[1];
+    } else {
+        config_path = "config";
+    }
     config *conf;
     conf = malloc(sizeof(*conf));
-    read_config(conf);
+    read_config(conf, config_path);
 
     fd_set master;
     fd_set read_fds;

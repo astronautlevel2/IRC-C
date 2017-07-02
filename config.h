@@ -18,6 +18,6 @@ typedef struct
     char        realname[20];
 } config;
 
-void read_config(config*);
+void read_config(config*, char*);
 int deserialize(config*, FILE*);
-int serialize(config*);
+int serialize(config*, char*);
