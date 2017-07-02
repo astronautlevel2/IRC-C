@@ -15,6 +15,7 @@ typedef struct
 	uint16_t	port;
 	char		user[20];
 	char		password[20];
+    char        realname[20];
 } config;
 
 void read_config(config*);

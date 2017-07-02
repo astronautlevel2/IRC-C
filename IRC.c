@@ -51,7 +51,7 @@ int irc_login(int sock_fd, config *conf)
 	char USER_STRING[128];
 
 	sprintf(NICK_STRING, "NICK %s\n", conf->user);
-	sprintf(USER_STRING, "USER %s * 0 :%s\n", conf->user, conf->user);
+	sprintf(USER_STRING, "USER %s * 0 :%s\n", conf->user, strlen(conf->realname) == 0 ? conf->user : conf->realname);
 
 	send(sock_fd, NICK_STRING, strlen(NICK_STRING), 0);
 	send(sock_fd, USER_STRING, strlen(USER_STRING), 0);

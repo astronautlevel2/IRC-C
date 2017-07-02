@@ -25,6 +25,9 @@ void read_config(config *conf)
 		printf("Username to use: ");
 		fgets(conf->user, 20, stdin);
 		conf->user[strlen(conf->user)-1] = '\0';
+		printf("Real name (optional): ");
+		fgets(conf->realname, 20, stdin);
+		conf->realname[strlen(conf->realname)-1] = '\0';
 		printf("Password to use (optional): ");
 		fgets(conf->password, 20, stdin);
 		conf->password[strlen(conf->password)-1] = '\0';
@@ -52,5 +55,6 @@ int setup_config(config *conf)
 	memset(conf->addr, '\0', sizeof(conf->addr));
 	memset(conf->user, '\0', sizeof(conf->user));
 	memset(conf->password, '\0', sizeof(conf->password));
+	memset(conf->realname, '\0', sizeof(conf->realname));
 	return 0;
 }
