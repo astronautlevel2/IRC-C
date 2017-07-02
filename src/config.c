@@ -11,7 +11,7 @@
 void read_config(config *conf, char *config_path)
 {
     FILE *fp;
-    if (fp = fopen(config_path, "r"))
+    if ((fp = fopen(config_path, "r")))
     {
         deserialize(conf, fp);
     } else {

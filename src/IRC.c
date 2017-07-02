@@ -7,15 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "config.h"
-
-char *strsub(char *input, int start, int len)
-{
-    char* substr;
-    substr = malloc((len - start) + 1); //Extra byte for null terminator
-    memcpy(substr, &input[start], len - start);
-    substr[len] = '\0';
-    return substr;
-}
+#include "stringse.h"
 
 int irc_connect(config *conf)
 {
@@ -45,7 +37,7 @@ int irc_connect(config *conf)
     return sock;
 }
 
-int irc_login(int sock_fd, config *conf)
+void irc_login(int sock_fd, config *conf)
 {
     char NICK_STRING[64];
     char USER_STRING[128];
@@ -57,7 +49,7 @@ int irc_login(int sock_fd, config *conf)
     send(sock_fd, USER_STRING, strlen(USER_STRING), 0);
 }
 
-int irc_pong(int sock_fd, char *buf)
+void irc_pong(int sock_fd, char *buf)
 {
     int len = strlen(buf);
     char pong_string[len];

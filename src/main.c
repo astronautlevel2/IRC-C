@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "config.h"
 #include "IRC.h"
+#include "stringse.h"
 
 #define BUF_SIZE 512
 
@@ -40,6 +41,10 @@ int main(int argc, char **argv)
 
     FD_SET(sock_fd, &master);
     FD_SET(0, &master);
+
+    char input_buffer[BUF_SIZE];
+    memset(&input_buffer, 0, BUF_SIZE);
+    int bytes_input = 0;
 
     for (;;)
     {
@@ -93,19 +98,17 @@ int main(int argc, char **argv)
 
         if (FD_ISSET(STDIN_FILENO, &read_fds))
         {
-            ssize_t r;
-            char buf[BUF_SIZE + 2];
-            memset(&buf, 0, BUF_SIZE);
+            read(STDIN_FILENO, &input_buffer[bytes_input], 1);
+            bytes_input++;
 
-            r = read(STDIN_FILENO, buf, BUF_SIZE);
-
-            if (buf[r-1] ==  '\n')
+            if (input_buffer[bytes_input - 1] ==  '\n')
             {
-                buf[r-1] = '\r';
-                buf[r] = '\n';
+                input_buffer[bytes_input - 1] = '\r';
+                input_buffer[bytes_input] = '\n';
+                send(sock_fd, input_buffer, bytes_input, 0);
+                memset(&input_buffer, 0, bytes_input);
+                bytes_input = 0;
             }
-
-            r = send(sock_fd, buf, r + 1, 0);
         }
     }
 }
