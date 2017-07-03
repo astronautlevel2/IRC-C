@@ -13,6 +13,8 @@
 #include "stringse.h"
 #include "IRC.h"
 
+#define BUF_SIZE 512
+
 int validate_ip(char *ipAddress) { //Code shamelessly adapted from SO
   struct sockaddr_in sa;
   int result = inet_pton(AF_INET, ipAddress, &(sa.sin_addr));
@@ -85,6 +87,30 @@ void irc_pong(int sock_fd, char *buf)
     send(sock_fd,pong_string, len, 0);
 }
 
-// void irc_message(int sock_fd, char *channel, char *buf)
-// {
-// }
+char *irc_switch(int sock_fd, char *buf, char *cur_chan)
+{
+    char *channel = strsub(buf, 6, strlen(buf) - 2);
+    char join_buffer[64];
+    if (strcmp(cur_chan, "NONE"))
+    {
+        sprintf(join_buffer, "PART %s\n JOIN %s\n", cur_chan, channel);
+    } else {
+        sprintf(join_buffer, "JOIN %s\n", channel);
+    }
+    send(sock_fd, join_buffer, strlen(join_buffer), 0);
+    return channel;
+}
+
+int irc_message(int sock_fd, char *channel, char *buf)
+{
+    char full_message[BUF_SIZE]; //If you're sending more than 500 characters people will hate you anyway so yolo
+    if (strcmp(channel, "NONE") == 0)
+    {
+        printw("You can't send a message to a NONE channel!\n");
+        refresh();
+        return 1;
+    }
+    sprintf(full_message, "PRIVMSG %s :%s", channel, buf);
+    send(sock_fd, full_message, strlen(full_message), 0);
+    return 0;
+}

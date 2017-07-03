@@ -12,7 +12,7 @@ This is a simple command line IRC client. Right now, it has very little function
 * Password field in config doesn't actually do anything.
 * Real name support as a config option. If no real name specified, will use username in real name field (what it did before)
 
-No other IRC commands are implemented, and all have to be done manually. Even normal chatting has to be done with PRIVMSG
+The only IRC commands implemented are JOIN (with a non-standard implementation - joining a new channel will PART you with the old one), and PRIVMSG, which is used simply by typing when in a channel. All other commands can be sent by prefacing them with a /
 
 The code is fugly, but this is more me making sure I understand how sockets and basic IRC protocol works, so I can work on something more interesting ( ͡° ͜ʖ ͡°)
 

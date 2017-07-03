@@ -17,4 +17,5 @@ struct addrinfo *dns_magic(char*, int, struct addrinfo*);
 int irc_connect(config*);
 void irc_login(int, config*);
 void irc_pong(int, char*);
-// void irc_message(int, char*, char*);
+char *irc_switch(int, char*, char*);
+int irc_message(int, char*, char*);

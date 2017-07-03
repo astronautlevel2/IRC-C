@@ -105,7 +105,7 @@ int main(int argc, char **argv)
             } else {
                 // delete_line(input_buffer);
                 printw("\r%s", buf);
-                printw("%s", input_buffer);
+                printw("%s> %s", channel, input_buffer);
                 refresh();
             }
         }
@@ -136,11 +136,17 @@ int main(int argc, char **argv)
                 input_buffer[bytes_input] = '\n';
                 if (input_buffer[0] == '/')
                 {
-                    //TODO: Implement command handling
+                    if (strcmp(strsub(input_buffer, 0, 5), "/JOIN") == 0)
+                    {
+                        strcpy(channel, irc_switch(sock_fd, input_buffer, channel));
+                    } else {
+                        send(sock_fd, strsub(input_buffer, 1, strlen(input_buffer)), strlen(input_buffer) - 1, 0);
+                    }
                 } else {
-                    send(sock_fd, input_buffer, bytes_input, 0);
-                    // irc_message(sock_fd, channel, input_buffer);
+                    irc_message(sock_fd, channel, input_buffer);
                 }
+                printw("%s> ", channel);
+                refresh();
                 memset(&input_buffer, 0, bytes_input);
                 bytes_input = 0;
             }
