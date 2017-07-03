@@ -10,7 +10,6 @@ This is a simple command line IRC client. Right now, it has very little function
 * Automatically sends NICK and USER messages on connection.
 * PONGs all PINGs.
 * Password field in config doesn't actually do anything.
-* Addresses need to be IPs. This is actually a major pain. Will change later.
 * Real name support as a config option. If no real name specified, will use username in real name field (what it did before)
 
 No other IRC commands are implemented, and all have to be done manually. Even normal chatting has to be done with PRIVMSG

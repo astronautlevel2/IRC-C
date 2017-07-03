@@ -6,11 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include "config.h"
 
 #pragma once
 
+int validate_ip(char*);
+struct addrinfo *dns_magic(char*, int, struct addrinfo*);
 int irc_connect(config*);
-int irc_login(int, config*);
-int irc_pong(int, char*);
-void irc_message(int, char*, char*);
+void irc_login(int, config*);
+void irc_pong(int, char*);
+// void irc_message(int, char*, char*);

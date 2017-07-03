@@ -6,8 +6,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <ncurses.h>
 #include "config.h"
 #include "stringse.h"
+#include "IRC.h"
+
+int validate_ip(char *ipAddress) { //Code shamelessly adapted from SO
+  struct sockaddr_in sa;
+  int result = inet_pton(AF_INET, ipAddress, &(sa.sin_addr));
+  return result != 0;
+}
+
+struct addrinfo *dns_magic(char *addr, int port_i, struct addrinfo *hints)
+{
+    struct addrinfo *res;
+    char port[5];
+    sprintf(port, "%i", port_i);
+    int status;
+    if ((status = getaddrinfo(addr, port, hints, &res)) != 0)
+    {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+        endwin();
+        exit(2);
+    }
+    return res;
+}
 
 int irc_connect(config *conf)
 {
@@ -16,6 +41,7 @@ int irc_connect(config *conf)
     if (sock < 0)
     {
         perror("sock");
+        endwin();
         exit(1);
     }
 
@@ -31,6 +57,7 @@ int irc_connect(config *conf)
     if (status == -1)
     {
         perror("connect");
+        endwin();
         exit(1);
     }
 
@@ -58,6 +85,6 @@ void irc_pong(int sock_fd, char *buf)
     send(sock_fd,pong_string, len, 0);
 }
 
-void irc_message(int sock_fd, char *channel, char *buf)
-{
-}
+// void irc_message(int sock_fd, char *channel, char *buf)
+// {
+// }

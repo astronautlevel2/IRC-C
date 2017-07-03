@@ -1,4 +1,4 @@
 CC=gcc-6
 
 all:
-	$(CC) -o IRC src/*.c -Wall -Wextra -pedantic -lncurses
+	$(CC) -g -o IRC src/*.c -O0 -Wall -Wextra -pedantic -lncurses
