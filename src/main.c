@@ -128,6 +128,7 @@ int main(int argc, char **argv)
             if (c == 127 && bytes_input != 0) // If it's a backspace and we have actual values, we curse curses and then delete the previous character
             {
                 bytes_input--; // Gotta decrement this
+                input_buffer[bytes_input] = '\0'; // Properly null out deleted characters
                 int x = 0;
                 int y = 0;
                 getyx(stdscr, y, x);
